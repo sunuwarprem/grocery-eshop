@@ -9,6 +9,7 @@ import com.prem.grocery_eshop.model.User;
 import com.prem.grocery_eshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class UserServiceImp implements UserService{
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserResponse saveUser(UserRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyExists("Email already registered: " + request.email());
@@ -28,15 +30,17 @@ public class UserServiceImp implements UserService{
     }
 
     @Override
+    @Transactional
     public UserResponse updateUser(int id, UserRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         UserMappers.toUpdateEntity(request, user);
         User updatedUser = userRepository.save(user);
         return UserMappers.toUserResponse(updatedUser);
     }
 
     @Override
+    @Transactional
     public String deleteUser(int id) {
        if(!userRepository.existsById(id)){
           throw  new UserNotFoundException(("User not found by id "+id));
@@ -46,6 +50,7 @@ public class UserServiceImp implements UserService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getUserById(int id) {
         User user=userRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("User not found by Id "+id));
@@ -53,6 +58,7 @@ public class UserServiceImp implements UserService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
         List<User> users=userRepository.findAll();
         if(users.isEmpty()){
