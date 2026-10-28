@@ -31,8 +31,8 @@ public record UserRequest(
         LocalDate dob,
 
         @Schema(example = "9876543210")
-        @Min(value = 1000000000L, message = "Phone number must be 10 digits")
-        @Max(value = 9999999999L, message = "Phone number must be 10 digits")
+        @Min(value = 1000000000L, message = "Phone number must be exactly 10 digits")
+        @Max(value = 9999999999L, message = "Phone number must be exactly 10 digits")
         long phoneNo,
 
         @Schema(example = "john@example.com")

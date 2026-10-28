@@ -53,7 +53,7 @@ public class UserServiceImp implements UserService{
     @Transactional(readOnly = true)
     public UserResponse getUserById(int id) {
         User user=userRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("User not found by Id "+id));
+                new UserNotFoundException("User not found by Id "+id));
         return UserMappers.toUserResponse(user);
     }
 
@@ -62,7 +62,7 @@ public class UserServiceImp implements UserService{
     public List<UserResponse> getAllUsers() {
         List<User> users=userRepository.findAll();
         if(users.isEmpty()){
-            throw new RuntimeException("User doesnt not exists");
+            throw new UserNotFoundException("User doesnt not exists");
         }
         return users.stream().map(UserMappers::toUserResponse).toList();
     }

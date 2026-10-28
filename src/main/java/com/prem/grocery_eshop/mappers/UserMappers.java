@@ -27,6 +27,7 @@ public final class UserMappers {
                 user.getDob(),
                 user.getPhoneNo(),
                 user.getEmail()
+
         );
     }
     public static void toUpdateEntity(UserRequest request, User user){
